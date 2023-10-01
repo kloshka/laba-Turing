@@ -1,0 +1,257 @@
+0, ,<,go
+
+go,1,<,go
+go,0,<,go # переход в начало двоичного числа
+go, ,>,copy
+
+copy,1,o,copy1
+copy,0,z,copy0
+copy, ,=,prohod! # закончилось копирование слова
+
+copy0,z,>,copy0
+copy0,1,>,copy0 #копирование 0
+copy0,0,>,copy0
+copy0, ,>,copy2 # чтобы был пробел между входными и выходными
+
+copy2, ,0,return
+copy2,1,>,copy2 #cтавим 0
+copy2,0,>,copy2
+
+copy1,o,>,copy1
+copy1,1,>,copy1 #копирование 1
+copy1,0,>,copy1
+copy1, ,>,copy3 # чтобы был пробел между входными и выходными
+
+copy3, ,1,return
+copy3,0,>,copy3 # cтавим 1
+copy3,1,>,copy3
+
+return,1,<,return # возврат к пробелу между копией и оригиналом 
+return,0,<,return
+return, ,<,return1
+
+return1,0,<,return1 
+return1,1,<,return1 # продолжение копирования по одному символу с крайнего левого 
+return1,z,>,copy
+return1,o,>,copy
+
+prohod!, ,!,prohod! # Замена пробела на восклицательный знак для избежания зацикливания
+prohod!,!,>,prohod
+
+prohod,1,>,prohod # переход к крайнему правому элементу копии
+prohod,0,>,prohod
+prohod, ,!,perevod3* # Замена пробела на восклицательный знак для избежания зацикливания
+
+perevod3*,!,<,perevod3
+
+#замена каждой триады на цифру восьмеричной СС
+perevod3,1, ,perevod**1
+perevod3,0, ,perevod**0
+perevod3,!,=,clay #Дошли до границы между вводом и выводом
+
+perevod**1, ,<,perevod**1
+perevod**1,1, ,perevod*11
+perevod**1,0, ,perevod*01
+perevod**1,!, ,perevod001!
+
+perevod*11, ,<,perevod*11
+perevod*11,1, ,perevod111
+perevod*11,0, ,perevod011
+perevod*11,!, ,perevod011!
+
+perevod*01, ,<,perevod*01
+perevod*01,1, ,perevod101
+perevod*01,0, ,perevod001
+
+perevod**0, ,<,perevod**0
+perevod**0,1, ,perevod*10
+perevod**0,0, ,perevod*00
+
+perevod*10, ,<,perevod*10
+perevod*10,1, ,perevod110
+perevod*10,0, ,perevod010
+perevod*10,!, ,perevod010!
+
+perevod*00, ,<,perevod*00
+perevod*00,0, ,perevod000
+perevod*00,1, ,perevod100
+
+
+perevod001!, ,!,perevod001!
+perevod001!,!,>,perevod001
+
+perevod010!, ,!,perevod010!
+perevod010!,!,>,perevod010
+
+perevod011!, ,!,perevod011!
+perevod011!,!,>,perevod011
+
+perevod000, ,0,vlevo
+perevod001, ,1,vlevo
+perevod010, ,2,vlevo
+perevod011, ,3,vlevo
+perevod100, ,4,vlevo
+perevod101, ,5,vlevo
+perevod110, ,6,vlevo
+perevod111, ,7,vlevo
+
+vlevo,0,<,perevod3
+vlevo,1,<,perevod3
+vlevo,2,<,perevod3
+vlevo,3,<,perevod3
+vlevo,4,<,perevod3
+vlevo,5,<,perevod3
+vlevo,6,<,perevod3
+vlevo,7,<,perevod3
+
+clay,!,>,clay
+clay,0,>,clay #склеивание цифр в число
+clay,1,>,clay
+clay,2,>,clay
+clay,3,>,clay
+clay,4,>,clay
+clay,5,>,clay
+clay,6,>,clay
+clay,7,>,clay
+clay, ,>,clay2
+
+clay2, ,>,clay2
+clay2,0, ,z0
+clay2,1, ,z1
+clay2,2, ,z2
+clay2,3, ,z3
+clay2,4, ,z4
+clay2,5, ,z5
+clay2,6, ,z6
+clay2,7, ,z7
+clay2,!, ,almostover #склеивание завершено
+
+almostover, ,<,almostover
+almostover,!,<,vozvrat
+almostover,0,<,almostover
+almostover,1,<,almostover
+almostover,2,<,almostover
+almostover,3,<,almostover
+almostover,4,<,almostover
+almostover,5,<,almostover
+almostover,6,<,almostover
+almostover,7,<,almostover
+
+vozvrat,o,1,left #восстанавливаем запись исходного числа
+vozvrat,z,0,left
+vozvrat, ,>,del!
+left,1,<,vozvrat
+left,0,<,vozvrat
+
+del!,1,>,del!
+del!,0,>,del! #замена восклицательного знака между вводом и выводом на пробел
+del!,!, ,del!
+del!, ,>,end
+
+end,0,>,end
+end,1,>,end
+end,2,>,end
+end,3,>,end
+end,4,>,end
+end,5,>,end
+end,6,>,end
+end,7,>,end
+end, ,#,end
+
+#Перемещение цифр
+z0, ,<,perenos0
+perenos0, ,<,perenos0
+perenos0,0,>,ustanovka0
+perenos0,1,>,ustanovka0
+perenos0,2,>,ustanovka0
+perenos0,3,>,ustanovka0 
+perenos0,4,>,ustanovka0
+perenos0,5,>,ustanovka0
+perenos0,6,>,ustanovka0
+perenos0,7,>,ustanovka0
+ustanovka0, ,0,clay
+
+z1, ,<,perenos1
+perenos1, ,<,perenos1
+perenos1,0,>,ustanovka1
+perenos1,1,>,ustanovka1
+perenos1,2,>,ustanovka1
+perenos1,3,>,ustanovka1
+perenos1,4,>,ustanovka1
+perenos1,5,>,ustanovka1
+perenos1,6,>,ustanovka1
+perenos1,7,>,ustanovka1
+ustanovka1, ,1,clay
+
+z2, ,<,perenos2
+perenos2, ,<,perenos2
+perenos2,0,>,ustanovka2
+perenos2,1,>,ustanovka2
+perenos2,2,>,ustanovka2
+perenos2,3,>,ustanovka2
+perenos2,4,>,ustanovka2
+perenos2,5,>,ustanovka2
+perenos2,6,>,ustanovka2
+perenos2,7,>,ustanovka2
+ustanovka2, ,2,clay
+
+z3, ,<,perenos3
+perenos3, ,<,perenos3
+perenos3,0,>,ustanovka3
+perenos3,1,>,ustanovka3
+perenos3,2,>,ustanovka3
+perenos3,3,>,ustanovka3
+perenos3,4,>,ustanovka3
+perenos3,5,>,ustanovka3
+perenos3,6,>,ustanovka3
+perenos3,7,>,ustanovka3
+ustanovka3, ,3,clay
+
+z4, ,<,perenos4
+perenos4, ,<,perenos4
+perenos4,0,>,ustanovka4
+perenos4,1,>,ustanovka4
+perenos4,2,>,ustanovka4
+perenos4,3,>,ustanovka4
+perenos4,4,>,ustanovka4
+perenos4,5,>,ustanovka4
+perenos4,6,>,ustanovka4
+perenos4,7,>,ustanovka4
+ustanovka4, ,4,clay
+
+z5, ,<,perenos5
+perenos5, ,<,perenos5
+perenos5,0,>,ustanovka5
+perenos5,1,>,ustanovka5
+perenos5,2,>,ustanovka5
+perenos5,3,>,ustanovka5
+perenos5,4,>,ustanovka5
+perenos5,5,>,ustanovka5
+perenos5,6,>,ustanovka5
+perenos5,7,>,ustanovka5
+ustanovka5, ,5,clay
+
+z6, ,<,perenos6
+perenos6, ,<,perenos6
+perenos6,0,>,ustanovka6
+perenos6,1,>,ustanovka6
+perenos6,2,>,ustanovka6
+perenos6,3,>,ustanovka6
+perenos6,4,>,ustanovka6
+perenos6,5,>,ustanovka6
+perenos6,6,>,ustanovka6
+perenos6,7,>,ustanovka6
+ustanovka6, ,6,clay
+
+z7, ,<,perenos7
+perenos7, ,<,perenos7
+perenos7,0,>,ustanovka7
+perenos7,1,>,ustanovka7
+perenos7,2,>,ustanovka7
+perenos7,3,>,ustanovka7
+perenos7,4,>,ustanovka7
+perenos7,5,>,ustanovka7
+perenos7,6,>,ustanovka7
+perenos7,7,>,ustanovka7
+ustanovka7, ,7,clay
+
